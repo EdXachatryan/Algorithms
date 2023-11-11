@@ -1,5 +1,7 @@
 #pragma once
+
 #include <vector>
+#include <algorithm>
 
 using std::vector;
 
@@ -17,27 +19,16 @@ using std::vector;
 
 void rotate(vector<int>& nums, int k) {
 
-    if (k > nums.size())
-        k = k % nums.size();
+    // [1, 2, 3, 4, 5, 6, 7]
+    // [5, 6, 7, 1, 2, 3, 4]
+    // st1 reverse full      =>  7 6 5 4 3 2 1
+    // st2 reverse begin,k   =>  5 6 7 4 3 2 1
+    // st3 reverse k,end     =>  5 4 7 1 2 3 4
+    
+    k = k % nums.size();
+    std::reverse(nums.begin(), nums.end());
+    std::reverse(nums.begin(), nums.begin() + k);
+    std::reverse( nums.begin() + k, nums.end());
 
-    int stepCount = 0;
-
-    int lastValue = nums.at(0);
-    int lastPos = 0;
-    for (int i = 0; i < nums.size(); ++i) {
-
-        lastPos = (lastPos + k >= nums.size()) ? (lastPos + k) - (nums.size()) : lastPos + k;
-        int temp = nums[lastPos];
-        nums[lastPos] = lastValue;
-        lastValue = temp;
-        stepCount++;
-        if (nums.size() % 2 == 0 && stepCount * k > nums.size()) {
-            ++lastPos;
-            lastValue = nums[lastPos];
-            stepCount = 0;
-        }
-
-            
-    }
 }
 // todo unit test
